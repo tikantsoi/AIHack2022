@@ -1,3 +1,3 @@
-# AiHack2022
+# AIHack2022
 
-This is 24-hour AI hackathon organised
+This is a 24-hour hackathon event organised by the Imperial College Data Science Society. We were given the task to 
