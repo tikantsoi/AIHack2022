@@ -13,8 +13,6 @@ from scipy import stats
 import os
 import yfinance as yf
 
-#%%
-
 def import_data(codes, start_date, end_date):
     """downloads all data for each backtest from yahoo Finance."""
     data = yf.download(codes, start_date, end_date)
@@ -148,75 +146,7 @@ def evaluate(predictions, answers, scaler, model_name, raw_data=False):
         os.makedirs("Plots")
     plt.savefig(f"Plots/{model_name}.png")
         
-#%%
 
-# best 64 neurons
-# 0.4 dropout
-
-# 3 the best
-kernel_width = 8
-
-look_forward = 1
-
-foldername = "Models"
-
-model_name = f"volatility_64Neurons_ker{kernel_width}_look{look_forward}"
-
-epochs = 10
-
-# 0.0001 the best
-learning_rate = 0.001
-
-# 64 thhe best
-batch_size = 64
-
-dataset = load_data("energy_dataset.csv")
-
-#dataset = import_data(["RBLX"], "2021-04-01","2022-03-13")["Adj Close"]
-
-Xtrain, ytrain, Xtest, ytest, scaler = preprocess(dataset, kernel_width, look_forward)
-
-model, history, score = train_model(Xtrain, ytrain, Xtest, ytest, epochs, learning_rate, batch_size)
-
-#plot_loss(history.history)
-
-#N = len(ytest)
-#yrecent = ytest[N-kernel_width:N]
-#Xrecent = Xtest[N-1:N]
-
-predictions = predict(model, Xtest)
-
-evaluate(predictions, ytest, scaler, model_name)
-
-#%%
-
-N = len(ytest)
-yrecent = ytest[N-kernel_width:N]
-Xrecent = Xtest[N-1:N]
-
-predictions = predict(model, Xrecent)
-
-#%%
-
-kernel_list = [4,8,16,32,64]
-
-look_forward = 1
-
-for kernel_width in kernel_list:
-    dataset = load_data("energy_dataset.csv")
-    Xtrain, ytrain, Xtest, ytest, scaler = preprocess(dataset, kernel_width, look_forward)
-    model, history, score = train_model(Xtrain, ytrain, Xtest, ytest, epochs, learning_rate, batch_size)
-    predictions = predict(model, Xtest)
-    model_name = f"energyonly_ker{kernel_width}_look{look_forward}"
-    evaluate(predictions, ytest, scaler, model_name)
-    
-#%%
-
-kernel_width = 8
-
-look_forward_list = [4,16,48,144,336]
-
-#%%
 
 
 
